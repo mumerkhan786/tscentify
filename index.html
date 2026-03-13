@@ -303,6 +303,7 @@
       font-size:clamp(.7rem,1.8vw,.8rem); letter-spacing:.07em;
       padding:.85rem 1.1rem;
       outline:none;
+      cursor:text !important;
       transition:background .3s, border-color .3s;
       -webkit-appearance:none;
     }
@@ -326,9 +327,11 @@
       text-transform:uppercase;
       padding:.85rem clamp(1rem,2.8vw,1.6rem) !important;
       white-space:nowrap;
+      cursor:pointer !important;
       transition:background-position .4s, box-shadow .3s, transform .2s !important;
       box-shadow:0 0 24px rgba(212,168,67,.32) !important;
       -webkit-tap-highlight-color:transparent;
+      pointer-events:auto !important;
     }
     .btn-notify:hover {
       background-position:right center !important;
@@ -613,7 +616,7 @@
               placeholder="Your email address"
               autocomplete="email"
             />
-            <button class="btn-notify" id="submitBtn" onclick="submitEmail()">
+            <button class="btn-notify" id="submitBtn">
               <span id="btnText">Notify Me</span>
               <span id="btnLoad" style="display:none">···</span>
             </button>
@@ -770,34 +773,47 @@ function submitEmail(){
     return;
   }
 
-  btn.disabled=true; txt.style.display='none'; load.style.display='inline';
+  btn.disabled=true;
+  txt.style.display='none';
+  load.style.display='inline';
 
   var FORM_ID  = '1FAIpQLSd0ujP0H0DZU6SnAae6EZbcY6oA2j4CXQ07zfQ1Bv_nr17UdQ';
   var ENTRY_ID = 'entry.1781249328';
 
   var iframe = document.createElement('iframe');
-  iframe.name = 'gf_iframe'; iframe.style.display='none';
+  iframe.name = 'gf_iframe';
+  iframe.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;left:-9999px';
   document.body.appendChild(iframe);
 
   var frm = document.createElement('form');
-  frm.method='POST';
-  frm.action='https://docs.google.com/forms/d/e/'+FORM_ID+'/formResponse';
-  frm.target='gf_iframe';
+  frm.method  = 'POST';
+  frm.action  = 'https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse';
+  frm.target  = 'gf_iframe';
+  frm.style.cssText = 'display:none;position:absolute;left:-9999px';
 
   var field = document.createElement('input');
-  field.type='hidden'; field.name=ENTRY_ID; field.value=val;
+  field.type  = 'hidden';
+  field.name  = ENTRY_ID;
+  field.value = val;
   frm.appendChild(field);
+
   document.body.appendChild(frm);
   frm.submit();
 
   setTimeout(function(){
     try{ document.body.removeChild(frm); document.body.removeChild(iframe); }catch(e){}
-    box.style.display='none';
-    ok.style.display='block';
-  },1200);
+    box.style.display  = 'none';
+    ok.style.display   = 'block';
+  }, 1500);
 }
 
-/* Enter key */
-document.getElementById('emailInput').addEventListener('keydown',function(e){
-  if(e.key==='Enter'){ e.preventDefault(); submitEmail(); }
+/* Attach events after DOM ready */
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('submitBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    submitEmail();
+  });
+  document.getElementById('emailInput').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); submitEmail(); }
+  });
 });
