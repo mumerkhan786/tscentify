@@ -645,7 +645,7 @@
       </div>
 
       <!-- Contact Email -->
-      <a href="mailto:tscentify@gmail.com" class="contact-email">tscentify@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#dda9aebeb8b3a9b4bba49dbab0bcb4b1f3beb2b0" class="contact-email"><span class="__cf_email__" data-cfemail="30444353555e4459564970575d51595c1e535f5d">[email&#160;protected]</span></a>
 
       <!-- Footer -->
       <p class="page-footer">© 2026 T-Scentify &nbsp;·&nbsp; All Rights Reserved</p>
@@ -655,7 +655,7 @@
 </div>
 
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 /* ── TICKER ── */
@@ -753,7 +753,9 @@
   requestAnimationFrame(loop);
 })();
 
-/* ── GOOGLE FORM SUBMIT ── */
+/* ── GOOGLE APPS SCRIPT SUBMIT ── */
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzijv-pjJDFhJ43tONBbN7Xij-C0P6MOVHlprrT1UjrtJ__PX_ojyWKl5sARoD7-xVK/exec';
+
 function submitEmail(){
   var inp  = document.getElementById('emailInput');
   var btn  = document.getElementById('submitBtn');
@@ -777,43 +779,31 @@ function submitEmail(){
   txt.style.display='none';
   load.style.display='inline';
 
-  var FORM_ID  = '1FAIpQLSd0ujP0H0DZU6SnAae6EZbcY6oA2j4CXQ07zfQ1Bv_nr17UdQ';
-  var ENTRY_ID = 'entry.1781249328';
-
-  var iframe = document.createElement('iframe');
-  iframe.name = 'gf_iframe';
-  iframe.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;left:-9999px';
-  document.body.appendChild(iframe);
-
-  var frm = document.createElement('form');
-  frm.method  = 'POST';
-  frm.action  = 'https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse';
-  frm.target  = 'gf_iframe';
-  frm.style.cssText = 'display:none;position:absolute;left:-9999px';
-
-  var field = document.createElement('input');
-  field.type  = 'hidden';
-  field.name  = ENTRY_ID;
-  field.value = val;
-  frm.appendChild(field);
-
-  document.body.appendChild(frm);
-  frm.submit();
-
-  setTimeout(function(){
-    try{ document.body.removeChild(frm); document.body.removeChild(iframe); }catch(e){}
-    box.style.display  = 'none';
-    ok.style.display   = 'block';
-  }, 1500);
+  fetch(SCRIPT_URL, {
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:'email='+encodeURIComponent(val)
+  })
+  .then(function(){
+    box.style.display='none';
+    ok.style.display='block';
+  })
+  .catch(function(){
+    box.style.display='none';
+    ok.style.display='block';
+  });
 }
 
-/* Attach events after DOM ready */
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('submitBtn').addEventListener('click', function(e){
     e.preventDefault();
     submitEmail();
   });
   document.getElementById('emailInput').addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){ e.preventDefault(); submitEmail(); }
+    if(e.key==='Enter'){ e.preventDefault(); submitEmail(); }
   });
 });
+</script>
+</body>
+</html>
